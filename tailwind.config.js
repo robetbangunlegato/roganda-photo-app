@@ -1,16 +1,18 @@
+// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
     content: [
-        "./app/**/*.{js,ts,jsx,tsx}",
-        "./pages/**/*.{js,ts,jsx,tsx}",
-        "./components/**/*.{js,ts,jsx,tsx}",
+        './app/**/*.{js,ts,jsx,tsx}',
+        './pages/**/*.{js,ts,jsx,tsx}',
+        './components/**/*.{js,ts,jsx,tsx}',
     ],
     theme: {
         extend: {
             fontFamily: {
-                poppins: ['Poppins', 'sans-serif'],
+                sans: ['"Poppins"', 'sans-serif'], // override default font-sans
             },
         },
     },
     plugins: [],
 }
+

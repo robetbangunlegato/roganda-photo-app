@@ -1,7 +1,9 @@
 'use client';
 
 import Link from "next/link";
+
 import { useEffect, useState } from "react";
+import Header from "./components/header.js";
 
 const slides = [
   {
@@ -26,28 +28,12 @@ export default function Home() {
     <main>
       <Header />
       <Main />
+      {/* <h1 className="text-6xl">Halaman tentang</h1> */}
     </main>
   );
 }
 
-function Header() {
-  return (
-    <header className="flex justify-around items-center h-20 shadow-md">
-      <Button text="Utama" href="#" />
-      <Button text="Tentang" href="#" />
-      <Button text="List paket" href="#" />
-      <Button text="Kontak" href="#" />
-      <Button text="Hasil foto" href="#" />
-      <p className="text-4xl text-center text-green-500 text-shadow-xs" style={{ fontFamily: 'Poppins-SemiBold', fontVariationSettings: 'wght 100' }}>Roganda Photo</p>
-    </header>
-  )
-}
 
-function Button({ text, href }) {
-  return (
-    <Link className="text-xl text-gray-500 underline text-shadow-lg hover:text-green-500 hover:text-shadow-2xs hover:scale-105 active:scale-100 transition" href={href}>{text}</Link>
-  )
-}
 
 function Main() {
   return (
