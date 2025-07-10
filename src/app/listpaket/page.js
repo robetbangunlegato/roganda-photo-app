@@ -7,7 +7,7 @@ export default function listPaket() {
             <div className=" grid grid-cols-3 mx-40 p-10 gap-7">
                 <Card title={'Pernikahaan'} price={'Rp2.500.000 - 3.000.000'} detail={'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor perspiciatis dolore nemo reiciendis tempora voluptatibus esse ratione, molestias, ullam corporis nobis impedit earum ut tempore fuga tenetur veniam nesciunt nihil!'} />
                 <Card title={'Aqiqah'} price={'Rp2.500.000 - 3.000.000'} detail={'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor perspiciatis dolore nemo reiciendis tempora voluptatibus esse ratione, molestias, ullam corporis nobis impedit earum ut tempore fuga tenetur veniam nesciunt nihil!'} />
-                <Card title={'Meninggal'} price={'Rp2.500.000 - 3.000.000'} detail={'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor perspiciatis dolore nemo reiciendis tempora voluptatibus esse ratione, molestias, ullam corporis nobis impedit earum ut tempore fuga tenetur veniam nesciunt nihil!'} />
+                <Card title={'Meninggal (batak)'} price={'Rp2.500.000 - 3.000.000'} detail={'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor perspiciatis dolore nemo reiciendis tempora voluptatibus esse ratione, molestias, ullam corporis nobis impedit earum ut tempore fuga tenetur veniam nesciunt nihil!'} />
                 <Card title={'Ulang Tahun'} price={'Rp2.500.000 - 3.000.000'} detail={'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolor perspiciatis dolore nemo reiciendis tempora voluptatibus esse ratione, molestias, ullam corporis nobis impedit earum ut tempore fuga tenetur veniam nesciunt nihil!'} />
             </div>
 
@@ -18,10 +18,10 @@ export default function listPaket() {
 function Card({ title, detail, price }) {
     return (
         <>
-            <div className="flex">
-                <div className="bg-white rounded-xl border-gray-200 border-2">
+            <div className="flex shadow-xl rounded-xl">
+                <div className="rounded-xl border-gray-200 border-2">
                     <div className="m-3.5">
-                        <img src="image/background.jpg" className="rounded-tl-xl rounded-tr-xl" />
+                        <img src="images/background.jpg" className="rounded-tl-xl rounded-tr-xl" />
                     </div>
                     <div className="m-6">
                         <p className="text-xl font-bold" style={{ fontFamily: 'Poppins-SemiBold' }}>{title}</p>

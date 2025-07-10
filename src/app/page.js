@@ -7,17 +7,17 @@ import Header from "./components/header.js";
 
 const slides = [
   {
-    image: '/image/slide1.jpg',
+    image: '/images/slide1.jpg',
     title: 'First slide label',
     description: 'Some representative placeholder content for the first slide.',
   },
   {
-    image: '/image/slide2.jpg',
+    image: '/images/slide2.jpg',
     title: 'Second slide label',
     description: 'Some representative placeholder content for the second slide.',
   },
   {
-    image: '/image/slide3.jpg',
+    image: '/images/slide3.jpg',
     title: 'Third slide label',
     description: 'Some representative placeholder content for the third slide.',
   },
