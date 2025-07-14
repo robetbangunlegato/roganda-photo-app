@@ -40,9 +40,28 @@ function Main() {
     <>
       <div className="">
         <img
-          src="/image/background.jpg" alt="background" className="absolute object-cover -z-10 opacity-10 w-full h-[calc(100vh-5rem)]"
+          src="/images/background.jpg" alt="background" className="absolute object-cover -z-10 opacity-10 w-full h-[calc(100vh-5rem)]"
         />
-        <div className="grid grid-cols-2 h-[calc(100vh-5rem)] justify-center items-center">
+        <div className="grid md:grid-cols-2 h-[calc(100vh-5rem)] justify-center items-center bg-yellow-400">
+          <section id="carousel" className="p-10">
+            <Carousel />
+          </section>
+          <section id="text-section" className="text-center bg-red-400">
+            <p className="text-6xl" style={{ fontFamily: 'Poppins-Bold' }}>Lebih dari sekedar foto</p>
+            <p className="text-4xl" style={{ fontFamily: 'Poppins-Bold' }}>Berpengalaman lebih dari
+              <span className="relative inline-block before:absolute before:-inset-1 before:block before:bg-green-100 ml-4 ">
+                <span className="relative text-green-500">20 tahun</span>
+              </span>
+            </p>
+            <p className="text-2xl text-gray-500" style={{ fontFamily: 'Poppins-SemiBold' }}>
+              Selalu hadir dalam momen-momen penting anda.
+            </p>
+            <div className="flex gap-2 justify-center">
+              <Link className="bg-green-500 text-white text-xl py-2 px-3 rounded-2xl hover:bg-green-400 hover:scale-105 active:bg-green-500 transition active:scale-100" href={'#'}>Booking sekarang</Link>
+              <Link className="bg-green-500 text-white text-xl py-2 px-3 rounded-2xl hover:bg-green-400 hover:scale-105 active:bg-green-500 transition active:scale-100" href={'#'}>Hasil foto</Link>              </div>
+          </section>
+        </div>
+        {/* <div className="grid grid-cols-2 h-[calc(100vh-5rem)] justify-center items-center">
           <div className="pl-10">
             <Carousel />
           </div>
@@ -62,8 +81,7 @@ function Main() {
                 <Link className="bg-green-500 text-white text-xl py-2 px-3 rounded-2xl hover:bg-green-400 hover:scale-105 active:bg-green-500 transition active:scale-100" href={'#'}>Hasil foto</Link>              </div>
             </div>
           </div>
-
-        </div>
+        </div> */}
       </div>
     </>
   )
@@ -96,7 +114,7 @@ function Carousel() {
   return (
     <div className="relative w-full overflow-hidden rounded-2xl shadow-xl">
       {/* Slides */}
-      <div className="relative h-[600px]">
+      <div className="h-[600px] w-full">
         {slides.map((slide, index) => (
           <div
             key={index}

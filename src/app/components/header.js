@@ -11,7 +11,7 @@ export default function Header() {
             <Button text="List paket" href="/listpaket" />
             <Button text="Kontak" href="/kontak" />
             <Button text="Hasil foto" href="/hasilfoto" />
-            <p className="text-4xl text-center text-green-500 text-shadow-xs" style={{ fontFamily: 'Poppins-SemiBold', fontVariationSettings: 'wght 100' }}>Roganda Studio</p>
+            <p className="text-4xl text-center text-green-500 text-shadow-xs hidden" style={{ fontFamily: 'Poppins-SemiBold', fontVariationSettings: 'wght 100' }}>Roganda Studio</p>
         </header>
     )
 }
