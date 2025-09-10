@@ -1,90 +1,240 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 
 import { useEffect, useState } from "react";
 import Header from "./components/header.js";
+import Image from "next/image";
 
 const slides = [
   {
-    image: '/images/slide1.jpg',
-    title: 'First slide label',
-    description: 'Some representative placeholder content for the first slide.',
+    image: "/images/slide1.jpg",
+    title: "First slide label",
+    description: "Some representative placeholder content for the first slide.",
   },
   {
-    image: '/images/slide2.jpg',
-    title: 'Second slide label',
-    description: 'Some representative placeholder content for the second slide.',
+    image: "/images/slide2.jpg",
+    title: "Second slide label",
+    description:
+      "Some representative placeholder content for the second slide.",
   },
   {
-    image: '/images/slide3.jpg',
-    title: 'Third slide label',
-    description: 'Some representative placeholder content for the third slide.',
+    image: "/images/slide3.jpg",
+    title: "Third slide label",
+    description: "Some representative placeholder content for the third slide.",
   },
-]
+];
+
+const imagesData = [
+  [
+    {
+      id: 1,
+      src: "/images/image-1.jpg",
+      tag: "pernikahaan",
+    },
+    {
+      id: 2,
+      src: "/images/image-2.jpg",
+      tag: "monding",
+    },
+  ],
+  [
+    {
+      id: 1,
+      src: "/images/image-2.jpg",
+      tag: "aqiqah",
+    },
+    {
+      id: 2,
+      src: "/images/image-1.jpg",
+      tag: "ulang tahun",
+    },
+  ],
+  [
+    {
+      id: 1,
+      src: "/images/image-1.jpg",
+      tag: "pernikahaan",
+    },
+    {
+      id: 2,
+      src: "/images/image-2.jpg",
+      tag: "monding",
+    },
+  ],
+];
 
 export default function Home() {
   return (
     <main>
-      <Header />
+      {/* <Header /> */}
       <Main />
       {/* <h1 className="text-6xl">Halaman tentang</h1> */}
     </main>
   );
 }
 
-
-
 function Main() {
+  const [selectedImage, setSelectedImages] = useState(null);
+  const [filter, setFilter] = useState("semua");
+  const allImages = imagesData.flat();
+
+  const filteredImages =
+    filter === "semua"
+      ? allImages
+      : allImages.filter(
+          (img) => img.tag.toLowerCase() === filter.toLowerCase()
+        );
+
+  // bagi hasil filter jadi 3 kolom
+  const columns = splitIntoColumns(filteredImages, 3);
+
   return (
     <>
-      <div className="">
-        <img
-          src="/images/background.jpg" alt="background" className="absolute object-cover -z-10 opacity-10 w-full h-[calc(100vh-5rem)]"
-        />
-        <div className="grid md:grid-cols-2 h-[calc(100vh-5rem)] justify-center items-center bg-yellow-400">
-          <section id="carousel" className="p-10">
-            <Carousel />
+      <div className="h-full ">
+        <div className="flex">
+          <section className="bg-red-600 w-1/2 h-100vh grid content-center">
+            <h1 className="text-4xl bg-amber-300 text-center">
+              Selamat datang diwebsite <br></br>
+              Roganda Photo
+            </h1>
           </section>
-          <section id="text-section" className="text-center bg-red-400">
-            <p className="text-6xl" style={{ fontFamily: 'Poppins-Bold' }}>Lebih dari sekedar foto</p>
-            <p className="text-4xl" style={{ fontFamily: 'Poppins-Bold' }}>Berpengalaman lebih dari
-              <span className="relative inline-block before:absolute before:-inset-1 before:block before:bg-green-100 ml-4 ">
-                <span className="relative text-green-500">20 tahun</span>
-              </span>
-            </p>
-            <p className="text-2xl text-gray-500" style={{ fontFamily: 'Poppins-SemiBold' }}>
-              Selalu hadir dalam momen-momen penting anda.
-            </p>
-            <div className="flex gap-2 justify-center">
-              <Link className="bg-green-500 text-white text-xl py-2 px-3 rounded-2xl hover:bg-green-400 hover:scale-105 active:bg-green-500 transition active:scale-100" href={'#'}>Booking sekarang</Link>
-              <Link className="bg-green-500 text-white text-xl py-2 px-3 rounded-2xl hover:bg-green-400 hover:scale-105 active:bg-green-500 transition active:scale-100" href={'#'}>Hasil foto</Link>              </div>
+          <section className="w-1/2 h-screen grid content-center bg-green-600">
+            <h1 className="text-4xl bg-amber-300 text-center">Kontak</h1>
+            <h1 className="text-4xl bg-amber-300 text-center">08153857185</h1>
+            <h1 className="text-4xl bg-amber-300 text-center">email</h1>
+            <h1 className="text-4xl bg-amber-300 text-center">instagram</h1>
           </section>
         </div>
-        {/* <div className="grid grid-cols-2 h-[calc(100vh-5rem)] justify-center items-center">
-          <div className="pl-10">
-            <Carousel />
-          </div>
-          <div className="text-center">
-            <div className="grid gap-4">
-              <p className="text-6xl" style={{ fontFamily: 'Poppins-Bold' }}>Lebih dari sekedar foto</p>
-              <p className="text-4xl" style={{ fontFamily: 'Poppins-Bold' }}>Berpengalaman lebih dari
-                <span className="relative inline-block before:absolute before:-inset-1 before:block before:bg-green-100 ml-4 ">
-                  <span className="relative text-green-500">20 tahun</span>
-                </span>
-              </p>
-              <p className="text-2xl text-gray-500" style={{ fontFamily: 'Poppins-SemiBold' }}>
-                Selalu hadir dalam momen-momen penting anda.
-              </p>
-              <div className="flex gap-2 justify-center">
-                <Link className="bg-green-500 text-white text-xl py-2 px-3 rounded-2xl hover:bg-green-400 hover:scale-105 active:bg-green-500 transition active:scale-100" href={'#'}>Booking sekarang</Link>
-                <Link className="bg-green-500 text-white text-xl py-2 px-3 rounded-2xl hover:bg-green-400 hover:scale-105 active:bg-green-500 transition active:scale-100" href={'#'}>Hasil foto</Link>              </div>
+
+        <Filter setFilter={setFilter} filter={filter} />
+        <div className="grid mx-7 gap-7 xl:grid-cols-3 xl:mx-40 xl:my-10 xl:gap-10">
+          {columns.map((column, index) => (
+            <div key={index}>
+              <FotoCard
+                imagesData={column}
+                onSelectedImage={setSelectedImages}
+              />
             </div>
-          </div>
-        </div> */}
+          ))}
+        </div>
+
+        {selectedImage && (
+          <ModalImage
+            src={selectedImage}
+            onClose={() => setSelectedImages(null)}
+          />
+        )}
+      </div>
+
+      {/* <section className="bg-amber-300 w-1/2">
+            section 2
+          </section>
+          <section className="bg-amber-300">
+            section 3
+      </section> */}
+    </>
+  );
+}
+
+function FotoCard({ imagesData, onSelectedImage }) {
+  return (
+    <>
+      <div className="grid gap-7 xl:gap-10">
+        {imagesData.map((image) => (
+          <Image
+            src={image.src}
+            alt="hasilFoto"
+            key={image.id}
+            className={`shadow-xl rounded-xl cursor-pointer hover:scale-103 transition`}
+            onClick={() => onSelectedImage(image.src)}
+            height={400}
+            width={600}
+          />
+        ))}
       </div>
     </>
-  )
+  );
+}
+
+function ModalImage({ src, onClose }) {
+  return (
+    <>
+      <div
+        className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center"
+        onClick={onClose}>
+        <div onClick={(e) => e.stopPropagation()} className="relative">
+          <img
+            src={src}
+            className="xl:w-auto xl:h-[50rem] object-contain rounded-xl"
+          />
+          <div className="text-center">
+            <button
+              className="absolute rounded-full bg-gray-100 text-2xl bottom-4 hover:bg-gray-400 hover:cursor-pointer"
+              onClick={onClose}>
+              <img src="images/cross.png" className="w-[40px] h[40px]" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ButtonFilter({ text, onClick, isActive }) {
+  return (
+    <>
+      <button
+        onClick={onClick}
+        className={`text-white xl:text-xl xl:px-4 xl:py-2 xl:rounded-xl px-4 py-3 rounded-xl whitespace-nowrap ${
+          isActive ? "bg-green-400" : "bg-green-600"
+        }`}>
+        {text}
+      </button>
+    </>
+  );
+}
+
+function Filter({ setFilter, filter }) {
+  return (
+    <>
+      <div className="mx-7 my-7 flex flex-wrap justify-evenly gap-y-3">
+        <ButtonFilter
+          text={"Semua"}
+          isActive={filter === "semua"}
+          onClick={() => setFilter("semua")}
+        />
+        <ButtonFilter
+          text={"Pernikahaan"}
+          isActive={filter === "pernikahaan"}
+          onClick={() => setFilter("pernikahaan")}
+        />
+        <ButtonFilter
+          text={"Aqiqah"}
+          isActive={filter === "aqiqah"}
+          onClick={() => setFilter("aqiqah")}
+        />
+        <ButtonFilter
+          text={"Monding(batak)"}
+          isActive={filter === "monding"}
+          onClick={() => setFilter("monding")}
+        />
+        <ButtonFilter
+          text={"Ulang tahun"}
+          isActive={filter === "ulang tahun"}
+          onClick={() => setFilter("ulang tahun")}
+        />
+      </div>
+    </>
+  );
+}
+
+function splitIntoColumns(array, numCols) {
+  const cols = Array.from({ length: numCols }, () => []);
+  array.forEach((item, index) => {
+    cols[index % numCols].push(item);
+  });
+  return cols;
 }
 
 function Carousel() {
@@ -118,8 +268,9 @@ function Carousel() {
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${index === current ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
-          >
+            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+              index === current ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}>
             <img
               src={slide.image}
               alt={`Slide ${index}`}
@@ -139,8 +290,9 @@ function Carousel() {
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-colors duration-300 ${index === current ? 'bg-white' : 'bg-white/50'
-              }`}
+            className={`w-3 h-3 rounded-full transition-colors duration-300 ${
+              index === current ? "bg-white" : "bg-white/50"
+            }`}
           />
         ))}
       </div>
@@ -148,17 +300,14 @@ function Carousel() {
       {/* Controls */}
       <button
         onClick={prevSlide}
-        className="absolute top-1/2 left-4 z-20 -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-2 rounded-full"
-      >
+        className="absolute top-1/2 left-4 z-20 -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-2 rounded-full">
         ‹
       </button>
       <button
         onClick={nextSlide}
-        className="absolute top-1/2 right-4 z-20 -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-2 rounded-full"
-      >
+        className="absolute top-1/2 right-4 z-20 -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-2 rounded-full">
         ›
       </button>
     </div>
   );
 }
-
