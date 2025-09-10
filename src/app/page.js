@@ -92,20 +92,29 @@ function Main() {
   return (
     <>
       <div className="h-full ">
-        <div className="flex">
-          <section className="bg-red-600 w-1/2 h-100vh grid content-center">
-            <h1 className="text-4xl bg-amber-300 text-center">
-              Selamat datang diwebsite <br></br>
-              Roganda Photo
-            </h1>
-          </section>
-          <section className="w-1/2 h-screen grid content-center bg-green-600">
-            <h1 className="text-4xl bg-amber-300 text-center">Kontak</h1>
-            <h1 className="text-4xl bg-amber-300 text-center">08153857185</h1>
-            <h1 className="text-4xl bg-amber-300 text-center">email</h1>
-            <h1 className="text-4xl bg-amber-300 text-center">instagram</h1>
-          </section>
-        </div>
+        <section
+          className="relative h-screen flex items-center justify-center bg-cover bg-center"
+          style={{ backgroundImage: "url('/images/background-mobile.jpg')" }}>
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="relative z-10 text-center text-white px-6">
+            <h1 className="text-5xl font-bold mb-4">Roganda Photo</h1>
+            <p className="text-xl mb-6">
+              Mengabadikan setiap momen berharga Anda
+            </p>
+            <div className="flex justify-center gap-4">
+              <a
+                href="#portfolio"
+                className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-xl font-semibold shadow-lg">
+                Lihat Portofolio
+              </a>
+              <a
+                href="https://wa.me/628153857185"
+                className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-xl font-semibold shadow-lg">
+                Hubungi Kami
+              </a>
+            </div>
+          </div>
+        </section>
 
         <Filter setFilter={setFilter} filter={filter} />
         <div className="grid mx-7 gap-7 xl:grid-cols-3 xl:mx-40 xl:my-10 xl:gap-10">
