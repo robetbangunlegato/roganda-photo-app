@@ -2,7 +2,7 @@ export default function AddPhoto() {
   return (
     <>
       <div className="mt-5 mx-52">
-        <label class="block mb-2 text-gray-900" for="file_input">
+        <label className="block mb-2 text-gray-900" htmlFor="file_input">
           Upload file
         </label>
         <input
@@ -11,7 +11,7 @@ export default function AddPhoto() {
           id="file_input"
           type="file"
         />
-        <p class="mt-1 text-gray-500" id="file_input_help">
+        <p className="mt-1 text-gray-500" id="file_input_help">
           JPG (MAX. 800x400px).
         </p>
         <button className="bg-green-600 rounded-xl font-semibold text-white px-6 py-3 text mt-5">
