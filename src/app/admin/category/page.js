@@ -1,6 +1,21 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function () {
+  const [categories, setCategories] = useState([]);
+  //
+  async function fetchCategories() {
+    const res = await fetch("/api/categories");
+    const data = await res.json();
+    setCategories(data);
+  }
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
   return (
     <>
       <div className="mt-5 mx-52">
@@ -25,14 +40,16 @@ export default function () {
               </tr>
             </thead>
             <tbody className="bg-black/10">
-              <tr className="border-b">
-                <td className="py-4 px-6">Desain Grafis</td>
-                <td className="py-4 px-6 ">
-                  <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">
-                    Hapus
-                  </button>
-                </td>
-              </tr>
+              {categories.map((category) => (
+                <tr className="border-b" key={category.id}>
+                  <td className="py-4 px-6">{category.name}</td>
+                  <td className="py-4 px-6 ">
+                    <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">
+                      Hapus
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

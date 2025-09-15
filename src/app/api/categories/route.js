@@ -1,74 +1,37 @@
-import fs from "fs";
-import path from "path";
-import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
-const categoriesFile = path.join(process.cwd(), "data", "categories.json");
+const prisma = new PrismaClient();
 
-// helper: pastikan file/dir ada
-function ensureFile() {
-  const dir = path.dirname(categoriesFile);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  if (!fs.existsSync(categoriesFile)) fs.writeFileSync(categoriesFile, "[]");
-}
-
+//
 export async function GET() {
-  try {
-    ensureFile();
-    const raw = fs.readFileSync(categoriesFile, "utf8");
-    const categories = JSON.parse(raw || "[]");
-    return NextResponse.json(categories);
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
-  }
+  const categories = await prisma.category.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  return new Response(JSON.stringify(categories), { status: 200 });
 }
 
+//
 export async function POST(req) {
-  try {
-    ensureFile();
+  const formData = await req.formData();
+  const category_name = formData.get("category_name");
 
-    const contentType = (req.headers.get("content-type") || "").toLowerCase();
-    let categoryName = null;
-
-    if (contentType.includes("application/json")) {
-      const body = await req.json();
-      categoryName = body.category_name || body.name;
-    } else if (contentType.includes("application/x-www-form-urlencoded")) {
-      const text = await req.text();
-      const params = new URLSearchParams(text);
-      categoryName = params.get("category_name") || params.get("name");
-    } else {
-      // fallback: coba parsing text sebagai urlencoded
-      const text = await req.text();
-      const params = new URLSearchParams(text);
-      categoryName = params.get("category_name") || params.get("name");
-    }
-
-    if (!categoryName || categoryName.trim() === "") {
-      return NextResponse.json(
-        { message: "Nama kategori wajib diisi" },
-        { status: 400 }
-      );
-    }
-
-    const raw = fs.readFileSync(categoriesFile, "utf8");
-    const categories = JSON.parse(raw || "[]");
-
-    const newCategory = {
-      id: Date.now(),
-      name: categoryName.trim(),
-    };
-
-    categories.push(newCategory);
-    fs.writeFileSync(
-      categoriesFile,
-      JSON.stringify(categories, null, 2),
-      "utf8"
+  if (!category_name) {
+    return new Response(
+      JSON.stringify({ message: "Nama kategori wajib diisi" }),
+      { status: 400 }
     );
-
-    return NextResponse.json(newCategory, { status: 201 });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
+
+  const newCategory = await prisma.category.create({
+    data: { name: category_name },
+  });
+
+  return new Response(
+    JSON.stringify({
+      success: true,
+      message: "Kategori berhasil ditambahkan!",
+      category: newCategory,
+    }),
+    { status: 201 }
+  );
 }
