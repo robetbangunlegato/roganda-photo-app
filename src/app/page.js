@@ -6,64 +6,6 @@ import { useEffect, useState } from "react";
 import Header from "./components/header.js";
 import Image from "next/image";
 
-const slides = [
-  {
-    image: "/images/slide1.jpg",
-    title: "First slide label",
-    description: "Some representative placeholder content for the first slide.",
-  },
-  {
-    image: "/images/slide2.jpg",
-    title: "Second slide label",
-    description:
-      "Some representative placeholder content for the second slide.",
-  },
-  {
-    image: "/images/slide3.jpg",
-    title: "Third slide label",
-    description: "Some representative placeholder content for the third slide.",
-  },
-];
-
-const imagesData = [
-  [
-    {
-      id: 1,
-      src: "/images/image-1.jpg",
-      tag: "pernikahaan",
-    },
-    {
-      id: 2,
-      src: "/images/image-2.jpg",
-      tag: "monding",
-    },
-  ],
-  [
-    {
-      id: 1,
-      src: "/images/image-2.jpg",
-      tag: "aqiqah",
-    },
-    {
-      id: 2,
-      src: "/images/image-1.jpg",
-      tag: "ulang tahun",
-    },
-  ],
-  [
-    {
-      id: 1,
-      src: "/images/image-1.jpg",
-      tag: "pernikahaan",
-    },
-    {
-      id: 2,
-      src: "/images/image-2.jpg",
-      tag: "monding",
-    },
-  ],
-];
-
 export default function Home() {
   return (
     <main>
@@ -75,10 +17,54 @@ export default function Home() {
 }
 
 function Main() {
+  const [photos, setPhotos] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [selectedImage, setSelectedImages] = useState(null);
   const [filter, setFilter] = useState("semua");
-  const allImages = imagesData.flat();
+  const allImages = photos.flat();
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPhotos();
+    fetchCategories();
+  }, []);
+
+  // get photos
+  async function fetchPhotos(category = "all") {
+    setLoading(true);
+    try {
+      const url =
+        category === "all" ? "/api/photos" : `/api/photos/${category}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (res.ok) {
+        setPhotos(data);
+      } else {
+        console.error("Error fetching photos:", data.message);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // get categories
+  async function fetchCategories() {
+    try {
+      const res = await fetch("/api/categories");
+      const data = await res.json();
+
+      if (res.ok) {
+        setCategories(data);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  }
 
   const filteredImages =
     filter === "semua"
@@ -158,26 +144,14 @@ function Main() {
               </div>
             ))}
           </div>
-          {selectedImage && (
+          {/* {selectedImage && (
             <ModalImage
               src={selectedImage}
               onClose={() => setSelectedImages(null)}
             />
-          )}
+          )} */}
         </section>
-        {/* <section className="bg-green-600">
-          <p>
-
-          </p>
-        </section> */}
       </div>
-
-      {/* <section className="bg-amber-300 w-1/2">
-            section 2
-          </section>
-          <section className="bg-amber-300">
-            section 3
-      </section> */}
     </>
   );
 }
@@ -188,7 +162,7 @@ function FotoCard({ imagesData, onSelectedImage }) {
       <div className="grid gap-7 xl:gap-10">
         {imagesData.map((image) => (
           <Image
-            src={image.src}
+            src={image.filePath}
             alt="hasilFoto"
             key={image.id}
             className={`shadow-xl rounded-xl cursor-pointer hover:scale-103 transition`}
