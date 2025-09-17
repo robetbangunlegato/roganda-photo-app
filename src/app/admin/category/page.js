@@ -77,6 +77,7 @@ export default function () {
     } catch (error) {
       console.error(error);
     }
+    setTimeout(() => setMessage(""), 3000);
   };
 
   return (

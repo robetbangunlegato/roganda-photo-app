@@ -11,5 +11,17 @@ model Category {
   id        Int      @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now())
+
+  photos    Photo[]   // relasi one-to-many
+}
+
+model Photo {
+  id          Int      @id @default(autoincrement())
+  filePath    String   // path/URL gambar disimpan
+  uploadedAt  DateTime @default(now())
+
+  // Relasi ke kategori
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
 }
   
