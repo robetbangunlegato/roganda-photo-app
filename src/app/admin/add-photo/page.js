@@ -99,7 +99,7 @@ export default function AddPhoto() {
             <label className="block mb-2">Pilih Kategori</label>
             <select
               name="category_name"
-              className="border p-2 w-full rounded-lg"
+              className="block w-full text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none p-2"
               required>
               <option value="">-- Pilih Kategori --</option>
               {categories.map((cat) => (

@@ -70,7 +70,7 @@ function Main() {
     filter === "semua"
       ? allImages
       : allImages.filter(
-          (img) => img.tag.toLowerCase() === filter.toLowerCase()
+          (img) => img.category.name.toLowerCase() === filter.toLowerCase()
         );
 
   // bagi hasil filter jadi 3 kolom
@@ -90,13 +90,13 @@ function Main() {
             </p>
             <div className="flex justify-center gap-4">
               <a
-                href="#portfolio"
-                className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-xl font-semibold shadow-lg">
+                href="#porfolio-section"
+                className="px-6 py-3 bg-red-600 rounded-xl font-semibold shadow-lg hover:scale-105 active:scale-100 transition">
                 Hasil foto
               </a>
               <button
                 onClick={() => setIsOpen(true)}
-                className="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-xl font-semibold shadow-lg">
+                className="px-6 py-3 bg-green-600 rounded-xl font-semibold shadow-lg hover:scale-105 active:scale-100 transition">
                 Hubungi Kami
               </button>
             </div>
@@ -132,8 +132,12 @@ function Main() {
             </div>
           )}
         </section>
-        <section>
-          <Filter setFilter={setFilter} filter={filter} />
+        <section className="min-h-screen" id="porfolio-section">
+          <Filter
+            setFilter={setFilter}
+            filter={filter}
+            categories={categories}
+          />
           <div className="grid mx-7 my-10 gap-7 xl:grid-cols-3 xl:mx-40 xl:my-10 xl:gap-10">
             {columns.map((column, index) => (
               <div key={index}>
@@ -144,12 +148,12 @@ function Main() {
               </div>
             ))}
           </div>
-          {/* {selectedImage && (
+          {selectedImage && (
             <ModalImage
               src={selectedImage}
               onClose={() => setSelectedImages(null)}
             />
-          )} */}
+          )}
         </section>
       </div>
     </>
@@ -166,7 +170,7 @@ function FotoCard({ imagesData, onSelectedImage }) {
             alt="hasilFoto"
             key={image.id}
             className={`shadow-xl rounded-xl cursor-pointer hover:scale-103 transition`}
-            onClick={() => onSelectedImage(image.src)}
+            onClick={() => onSelectedImage(image.filePath)}
             height={400}
             width={600}
           />
@@ -205,10 +209,8 @@ function ButtonFilter({ text, onClick, isActive }) {
     <>
       <button
         onClick={onClick}
-        className={`font-bold xl:text-xl xl:px-4 xl:py-2 xl:rounded-xl px-4 py-3 rounded-xl whitespace-nowrap ${
-          isActive
-            ? "bg-green-400 shadow-md text-black/50"
-            : "bg-green-600 text-white"
+        className={`text-white font-bold xl:text-xl xl:px-4 xl:py-2 xl:rounded-xl px-4 py-3 rounded-xl whitespace-nowrap hover:scale-105 active:scale-100 transition ${
+          isActive ? "bg-green-400 shadow-lg" : "bg-green-600"
         }`}>
         {text}
       </button>
@@ -216,16 +218,24 @@ function ButtonFilter({ text, onClick, isActive }) {
   );
 }
 
-function Filter({ setFilter, filter }) {
+function Filter({ setFilter, filter, categories }) {
   return (
     <>
-      <div className="mx-7 my-7 flex flex-wrap justify-evenly gap-y-3">
+      <div className="mx-7 flex flex-wrap justify-evenly gap-y-3 pt-7">
         <ButtonFilter
           text={"Semua"}
           isActive={filter === "semua"}
           onClick={() => setFilter("semua")}
         />
-        <ButtonFilter
+        {categories.map((category) => (
+          <ButtonFilter
+            key={category.id}
+            text={category.name}
+            isActive={filter === category.name}
+            onClick={() => setFilter(category.name)}
+          />
+        ))}
+        {/* <ButtonFilter
           text={"Pernikahaan"}
           isActive={filter === "pernikahaan"}
           onClick={() => setFilter("pernikahaan")}
@@ -244,7 +254,7 @@ function Filter({ setFilter, filter }) {
           text={"Ulang tahun"}
           isActive={filter === "ulang tahun"}
           onClick={() => setFilter("ulang tahun")}
-        />
+        /> */}
       </div>
     </>
   );
