@@ -25,23 +25,39 @@ function Main() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // pagination states
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const LIMIT = 5;
+
   useEffect(() => {
-    fetchPhotos();
+    // saat pertama load ambil data
+    fetchPhotos("all", 0, true);
     fetchCategories();
   }, []);
 
   // get photos
-  async function fetchPhotos(category = "all") {
+  async function fetchPhotos(category = "all", pageOffset = 0, reset = false) {
     setLoading(true);
     try {
       const url =
-        category === "all" ? "/api/photos" : `/api/photos/${category}`;
+        category === "all"
+          ? `/api/photos?limit=${LIMIT}&offset=${pageOffset * LIMIT}`
+          : `/api/photos/${category}?limit=${LIMIT}&offset=${
+              pageOffset * LIMIT
+            }`;
 
       const res = await fetch(url);
       const data = await res.json();
 
       if (res.ok) {
-        setPhotos(data);
+        if (reset) {
+          setPhotos(data.photos);
+        } else {
+          setPhotos((prev) => [...prev, ...data.photos]);
+        }
+        setHasMore((pageOffset + 1) * LIMIT < data.total);
+        setPage(pageOffset);
       } else {
         console.error("Error fetching photos:", data.message);
       }
@@ -148,6 +164,19 @@ function Main() {
               </div>
             ))}
           </div>
+          {/* tombol load more */}
+          {hasMore && (
+            <div className="flex justify-center mb-10 xl:mx-40 mx-7">
+              <button
+                onClick={() =>
+                  fetchPhotos(filter === "semua" ? "all" : filter, page + 1)
+                }
+                disabled={loading}
+                className="w-full px-6 py-4 border-green-600 border hover:bg-green-600 hover:text-white rounded-lg shadow-lg hover:scale-103 active:scale-100 transition disabled:opacity-50">
+                {loading ? "Memuat..." : "Muat Lebih Banyak"}
+              </button>
+            </div>
+          )}
           {selectedImage && (
             <ModalImage
               src={selectedImage}
@@ -235,26 +264,6 @@ function Filter({ setFilter, filter, categories }) {
             onClick={() => setFilter(category.name)}
           />
         ))}
-        {/* <ButtonFilter
-          text={"Pernikahaan"}
-          isActive={filter === "pernikahaan"}
-          onClick={() => setFilter("pernikahaan")}
-        />
-        <ButtonFilter
-          text={"Aqiqah"}
-          isActive={filter === "aqiqah"}
-          onClick={() => setFilter("aqiqah")}
-        />
-        <ButtonFilter
-          text={"Monding(batak)"}
-          isActive={filter === "monding"}
-          onClick={() => setFilter("monding")}
-        />
-        <ButtonFilter
-          text={"Ulang tahun"}
-          isActive={filter === "ulang tahun"}
-          onClick={() => setFilter("ulang tahun")}
-        /> */}
       </div>
     </>
   );
@@ -266,79 +275,4 @@ function splitIntoColumns(array, numCols) {
     cols[index % numCols].push(item);
   });
   return cols;
-}
-
-function Carousel() {
-  const [current, setCurrent] = useState(0);
-
-  // Auto slide setiap 3 detik
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 3000); // 3000ms = 3 detik
-
-    return () => clearInterval(interval); // Bersihkan interval saat komponen unmount
-  }, []);
-
-  const goToSlide = (index) => {
-    setCurrent(index);
-  };
-
-  const prevSlide = () => {
-    setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  };
-
-  const nextSlide = () => {
-    setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  };
-
-  return (
-    <div className="relative w-full overflow-hidden rounded-2xl shadow-xl">
-      {/* Slides */}
-      <div className="h-[600px] w-full">
-        {slides.map((slide, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-              index === current ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}>
-            <img
-              src={slide.image}
-              alt={`Slide ${index}`}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 p-6 bg-[rgba(0,0,0,0.3)] text-white text-center">
-              <h5 className="text-xl font-bold">{slide.title}</h5>
-              <p>{slide.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Indicators */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => goToSlide(index)}
-            className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-              index === current ? "bg-white" : "bg-white/50"
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* Controls */}
-      <button
-        onClick={prevSlide}
-        className="absolute top-1/2 left-4 z-20 -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-2 rounded-full">
-        ‹
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute top-1/2 right-4 z-20 -translate-y-1/2 bg-black bg-opacity-50 text-white px-3 py-2 rounded-full">
-        ›
-      </button>
-    </div>
-  );
 }

@@ -5,30 +5,31 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(req) {
   try {
+    const { searchParams } = new URL(req.url);
+    const limit = parseInt(searchParams.get("limit")) || 15; // default 15
+    const offset = parseInt(searchParams.get("offset")) || 0;
+
     const photos = await prisma.photo.findMany({
       include: {
         category: {
-          select: {
-            id: true,
-            name: true,
-          },
+          select: { id: true, name: true },
         },
       },
-      orderBy: {
-        uploadedAt: "desc", // Urutkan dari yang terbaru
-      },
+      orderBy: { uploadedAt: "desc" },
+      skip: offset,
+      take: limit,
     });
 
-    return NextResponse.json(photos, { status: 200 });
+    // hitung total foto untuk tahu apakah masih ada sisa
+    const total = await prisma.photo.count();
+
+    return NextResponse.json({ photos, total }, { status: 200 });
   } catch (error) {
     console.error("Error fetching photos:", error);
     return NextResponse.json(
-      {
-        success: false,
-        message: "Terjadi kesalahan server: " + error.message,
-      },
+      { success: false, message: "Terjadi kesalahan server: " + error.message },
       { status: 500 }
     );
   }

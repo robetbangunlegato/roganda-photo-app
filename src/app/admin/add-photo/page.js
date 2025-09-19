@@ -92,7 +92,7 @@ export default function AddPhoto() {
             required
           />
           <p className="mt-1 text-gray-500" id="file_input_help">
-            JPG, PNG, GIF (MAX. 800x400px).
+            JPG (MAX.15MB).
           </p>
 
           <div className="mt-4">
